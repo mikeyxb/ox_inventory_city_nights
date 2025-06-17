@@ -1,35 +1,116 @@
 return {
 	{
-        name = 'debug_crafting',
 		items = {
 			{
-				name = 'lockpick',
+				name = 'amethyst',
 				ingredients = {
-					scrapmetal = 5,
-					WEAPON_HAMMER = 0.05
+					rawamethyst = 2
 				},
 				duration = 5000,
-				count = 2,
+				count = 1,
+			},
+			{
+				name = 'clearquartz',
+				ingredients = {
+					rawquartz = 2
+				},
+				duration = 5000,
+				count = 1,
+			},
+			{
+				name = 'p1',
+				ingredients = {
+					shrooms = 2,
+					distilledwater = 1
+				},
+				duration = 5000,
+				count = 1,
+			},
+			{
+				name = 'p2',
+				ingredients = {
+					trout = 1,
+					anchovy = 1,
+					distilledwater = 1
+				},
+				duration = 5000,
+				count = 1,
+			},
+			{
+				name = 'p5',
+				ingredients = {
+					redpeppers = 2,
+					distilledwater = 1
+				},
+				duration = 5000,
+				count = 1,
+			},
+			{
+				name = 'distilledwater',
+				ingredients = {
+					water_bottle = 2
+				},
+				duration = 5000,
+				count = 1,
+			},
+			{
+				name = 'bubble',
+				ingredients = {
+					water_bottle = 2
+				},
+				duration = 5000,
+				count = 1,
 			},
 		},
 		points = {
-			vec3(-1147.083008, -2002.662109, 13.180260),
-			vec3(-345.374969, -130.687088, 39.009613)
+		  vec3(156.10, 253.38, 107.05),
 		},
 		zones = {
 			{
-				coords = vec3(-1146.2, -2002.05, 13.2),
-				size = vec3(3.8, 1.05, 0.15),
-				distance = 1.5,
-				rotation = 315.0,
-			},
-			{
-				coords = vec3(-346.1, -130.45, 39.0),
-				size = vec3(3.8, 1.05, 0.15),
-				distance = 1.5,
-				rotation = 70.0,
+			  label = 'Craft',
+			  icon = 'fa-solid fa-wrench',
+			  coords = vec3(156.10, 253.38, 107.05),
+			  size = vec3(3.8, 1.05, 0.15),
+			  distance = 1.5,
+			  rotation = 315.0,
 			},
 		},
-		blip = { id = 566, colour = 31, scale = 0.8 },
+	},
+	{
+		items = {
+			{
+				name = 'weedbrownie',
+				ingredients = {
+					butter = 1,
+					milk = 1,
+					choco_creme = 1
+				},
+				duration = 5000,
+				count = 5,
+			},
+			{
+				name = 'ricekrispietreats',
+				ingredients = {
+					marshmallows = 1,
+					butter = 1,
+					frosted_delight = 1
+				},
+				duration = 5000,
+				count = 5,
+			},
+		},
+		points = {
+		  vec3(164.44, -233.58, 49.89),
+		},
+		zones = {
+			{
+			  label = 'Cook',
+			  icon = 'fa-solid fa-wrench',
+			  coords = vec3(164.44, -233.58, 49.89),
+			  size = vec3(3.8, 1.05, 0.15),
+			  distance = 1.5,
+			  rotation = 315.0,
+			},
+		},
 	},
 }
