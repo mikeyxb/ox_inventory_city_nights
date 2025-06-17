@@ -4,14 +4,54 @@ local CraftingBenches = {}
 local Items = require 'modules.items.server'
 local Inventory = require 'modules.inventory.server'
 
+
+--#region edit for renewed businesses
 ---@param id number
 ---@param data table
+-- local function createCraftingBench(id, data)
+-- 	CraftingBenches[id] = {}
+-- 	local recipes = data.items
+
+-- 	if recipes then
+-- 		for i = 1, #recipes do
+-- 			local recipe = recipes[i]
+-- 			local item = Items(recipe.name)
+
+-- 			if item then
+-- 				recipe.weight = item.weight
+-- 				recipe.slot = i
+-- 			else
+-- 				warn(('failed to setup crafting recipe (bench: %s, slot: %s) - item "%s" does not exist'):format(id, i, recipe.name))
+-- 			end
+
+-- 			for ingredient, needs in pairs(recipe.ingredients) do
+-- 				if needs < 1 then
+-- 					item = Items(ingredient)
+
+-- 					if item and not item.durability then
+-- 						item.durability = true
+-- 					end
+-- 				end
+-- 			end
+-- 		end
+
+-- 		if shared.target then
+-- 			data.points = nil
+-- 		else
+-- 			data.zones = nil
+-- 		end
+
+-- 		CraftingBenches[id] = data
+-- 	end
+-- end
+
 local function createCraftingBench(id, data)
 	CraftingBenches[id] = {}
 	local recipes = data.items
+	local amount = recipes and #recipes or 0
 
-	if recipes then
-		for i = 1, #recipes do
+	if amount > 0 then
+		for i = 1, amount do
 			local recipe = recipes[i]
 			local item = Items(recipe.name)
 
@@ -39,9 +79,15 @@ local function createCraftingBench(id, data)
 			data.zones = nil
 		end
 
+		data.slots = amount
+
 		CraftingBenches[id] = data
 	end
 end
+
+exports('RegisterCraftStation', createCraftingBench)
+
+--#endregion
 
 for id, data in pairs(lib.load('data.crafting') or {}) do createCraftingBench(data.name or id, data) end
 
@@ -57,6 +103,37 @@ local function getCraftingCoords(source, bench, index)
 		return shared.target and bench.zones[index].coords or bench.points[index]
 	end
 end
+
+--#region edit for renewed businesses
+
+-- lib.callback.register('ox_inventory:openCraftingBench', function(source, id, index)
+-- 	local left, bench = Inventory(source), CraftingBenches[id]
+
+-- 	if not left then return end
+
+-- 	if bench then
+-- 		local groups = bench.groups
+-- 		local coords = getCraftingCoords(source, bench, index)
+
+-- 		if not coords then return end
+
+-- 		if groups and not server.hasGroup(left, groups) then return end
+-- 		if #(GetEntityCoords(GetPlayerPed(source)) - coords) > 10 then return end
+
+-- 		if left.open and left.open ~= source then
+-- 			local inv = Inventory(left.open) --[[@as OxInventory]]
+
+-- 			-- Why would the player inventory open with an invalid target? Can't repro but whatever.
+-- 			if inv?.player then
+-- 				inv:closeInventory()
+-- 			end
+-- 		end
+
+-- 		left:openInventory(left)
+-- 	end
+
+-- 	return { label = left.label, type = left.type, slots = left.slots, weight = left.weight, maxWeight = left.maxWeight }
+-- end)
 
 lib.callback.register('ox_inventory:openCraftingBench', function(source, id, index)
 	local left, bench = Inventory(source), CraftingBenches[id]
@@ -84,8 +161,10 @@ lib.callback.register('ox_inventory:openCraftingBench', function(source, id, ind
 		left:openInventory(left)
 	end
 
-	return { label = left.label, type = left.type, slots = left.slots, weight = left.weight, maxWeight = left.maxWeight }
+	return { label = left.label, type = left.type, slots = left.slots, weight = left.weight, maxWeight = left.maxWeight }, bench
 end)
+
+--#endregion
 
 local TriggerEventHooks = require 'modules.hooks.server'
 
@@ -191,7 +270,13 @@ lib.callback.register('ox_inventory:craftItem', function(source, id, index, reci
 				toSlot = toSlot,
 			}) then return false end
 
-			local success = lib.callback.await('ox_inventory:startCrafting', source, id, recipeId)
+            --#region edit for renewed businesses
+			-- local success = lib.callback.await('ox_inventory:startCrafting', source, id, recipeId)
+
+            local success = lib.callback.await('ox_inventory:startCrafting', source, recipe)
+
+            --#endregion
+
 
 			if success then
 				for name, needs in pairs(recipe.ingredients) do
