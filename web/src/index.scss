@@ -82,7 +82,6 @@ input[type='number']::-webkit-outer-spin-button {
   outline: none;
   display: flex;
   flex-direction: column;
-  z-index: 999;
 }
 
 .context-menu-item  {
@@ -334,10 +333,10 @@ button:active {
 
 // }
 
-.inventory-slot > * {
-  position: relative;
-  z-index: 1;
-}
+// .inventory-slot > * {
+//   position: relative;
+//   z-index: 1;
+// }
 
 
 .inventory-slot-label-box {
